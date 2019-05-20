@@ -1,0 +1,38 @@
+id_name,name,max_level,description,items
+aqua_affinity,Aqua Affinity,I,Speeds up how fast you can mine blocks underwater,helmet
+bane_of_arthropods,Bane of Arthropods,V,Increases attack damage against arthropods,sword axe
+blast_protection,Blast Protection,IV,Reduces blast and explosion damage,armor
+channeling,Channeling,I,Summons a lightning bolt at a targeted mob when enchanted item is thrown (targeted mob must be standing in raining),trident
+binding_curse,Curse of Binding,I,Cursed item can not be removed from player,armor
+vanishing_curse,Curse of Vanishing,I,Cursed item will disappear after player dies,sword chestplate pickaxe fishing_rod
+depth_strider,Depth Strider,III,Speeds up how fast you can move underwater,boots
+efficiency,Efficiency,V,Increases how fast you can mine,pickaxe shovel axe
+feather_falling,Feather Falling,IV,Reduces fall and teleportation damage,boots
+fire_aspect,Fire Aspect,II,Sets target on fire,sword
+fire_protection,Fire Protection,IV,Reduces damage caused by fire and lava,armor
+flame,Flame,I,Turns arrows into flaming arrows,bow
+fortune,Fortune,III,Increases block drops from mining,pickaxe shovel axe
+frost_walker,Frost Walker,II,Freezes water into ice so that you can walk on it,boots
+impaling,Impaling,V,Increases attack damage again sea creatures,trident
+infinity,Infinity,I,Shoots an infinite amount of arrows,bow
+knockback,Knockback,II,Increases knockback dealt (enemies repel backwards),sword
+looting,Looting,III,Increases amount of loot dropped when mob is killed,sword
+loyalty,Loyalty,III,Returns your weapon when it is thrown like a spear,trident
+luck_of_the_sea,Luck of the Sea,III,Increases chances of catching valuable items,fishing_rod
+lure,Lure,III,Increases the rate of fish biting your hook,fishing_rod
+mending,Mending,I,"Uses xp to mend your tools, weapons and armor",sword chestplate pickaxe fishing_rod
+multishot,Multishot,I,Shoots 3 arrows at once but only costs 1 arrow (from your inventory),crossbow
+piercing,Piercing,IV,Arrow can pierce through multiple entities,crossbow
+power,Power,V,Increases damage dealt by bow,bow
+projectile_protection,Projectile Protection,IV,"Reduces projectile damage (arrows, fireballs, fire charges)",armor
+protection,Protection,IV,"General protection against attacks, fire, lava, and falling",armor
+punch,Punch,II,Increases knockback dealt (enemies repel backwards),bow
+quick_charge,Quick Charge,III,Reduces the amount of time to reload a crossbow,crossbow
+respiration,Respiration,III,Extends underwater breathing (see better underwater),helmet
+riptide,Riptide,III,Propels the player forward when enchanted item is thrown while in water or rain,trident
+sharpness,Sharpness,V,Increases attack damage dealt to mobs,sword axe
+silk_touch,Silk Touch,I,Mines blocks themselves (fragile items),pickaxe shovel axe
+smite,Smite,V,Increases attack damage against undead mobs,sword axe
+sweeping,Sweeping Edge,III,Increases damage of sweep attack,sword
+thorns,Thorns,III,Causes damage to attackers,armor
+unbreaking,Unbreaking,III,Increases durability of item,sword chestplate pickaxe fishing_rod

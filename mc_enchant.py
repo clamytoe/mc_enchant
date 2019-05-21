@@ -60,12 +60,8 @@ def gen_df(filename, items=None):
 
 
 def split_title(df, title):
-    names = df[title].apply(
-        lambda name: name.split("(")[0]
-    )
-    id_names = df[title].apply(
-        lambda name: name.split("(")[1].replace(")", "")
-    )
+    names = df[title].apply(lambda name: name.split("(")[0])
+    id_names = df[title].apply(lambda name: name.split("(")[1].replace(")", ""))
     return id_names, names
 
 

@@ -1,13 +1,5 @@
-from os import path
-from urllib.request import urlretrieve
-
 import pandas as pd
 from bs4 import BeautifulSoup as Soup
-
-FILE = path.join("/tmp", "enchantment_list_pc.html")
-FILENAME = "enchantments"
-OUTPUT = {"csv": f"{FILENAME}.csv", "json": f"{FILENAME}.json"}
-URL = "https://www.digminecraft.com/lists/enchantment_list_pc.php"
 
 
 def clean_up_names(item_names):
@@ -69,17 +61,3 @@ def split_title(df, title):
     names = df[title].apply(lambda name: name.split("(")[0])
     id_names = df[title].apply(lambda name: name.split("(")[1].replace(")", ""))
     return id_names, names
-
-
-def main():
-    if not path.isfile(FILE):
-        urlretrieve(URL, FILE)
-
-    permitted = enchants_permitted(FILE)
-    enchantment_data = gen_df(FILE, items=permitted)
-    gen_file(enchantment_data)
-    gen_file(enchantment_data, "json")
-
-
-if __name__ == "__main__":
-    main()

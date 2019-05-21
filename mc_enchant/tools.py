@@ -52,9 +52,12 @@ def gen_df(filename, items=None):
     return data
 
 
-def gen_file(df, output_format="csv"):
-    file = OUTPUT[output_format]
-    df.to_json(file)
+def gen_file(df, filename, output_format="csv"):
+    file = f"{filename}.{output_format}"
+    if output_format == "csv":
+        df.to_csv(file)
+    else:
+        df.to_json(file)
 
 
 def split_title(df, title):

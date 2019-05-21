@@ -6,3 +6,5 @@ __pycache__/
 .idea/
 # Jupyter notebook
 .ipynb_checkpoints/
+# Project file
+enchantments.csv

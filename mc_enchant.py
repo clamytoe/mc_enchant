@@ -5,7 +5,8 @@ import pandas as pd
 from bs4 import BeautifulSoup as Soup
 
 FILE = path.join("/tmp", "enchantment_list_pc.html")
-OUTFILE = "enchantments.csv"
+FILENAME = "enchantments"
+OUTPUT = {"csv": f"{FILENAME}.csv", "json": f"{FILENAME}.json"}
 URL = "https://www.digminecraft.com/lists/enchantment_list_pc.php"
 
 
@@ -59,6 +60,11 @@ def gen_df(filename, items=None):
     return data
 
 
+def gen_file(df, output_format="csv"):
+    file = OUTPUT[output_format]
+    df.to_json(file)
+
+
 def split_title(df, title):
     names = df[title].apply(lambda name: name.split("(")[0])
     id_names = df[title].apply(lambda name: name.split("(")[1].replace(")", ""))
@@ -71,7 +77,8 @@ def main():
 
     permitted = enchants_permitted(FILE)
     enchantment_data = gen_df(FILE, items=permitted)
-    enchantment_data.to_csv(OUTFILE)
+    gen_file(enchantment_data)
+    gen_file(enchantment_data, "json")
 
 
 if __name__ == "__main__":

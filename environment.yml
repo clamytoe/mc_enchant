@@ -3,6 +3,7 @@ channels:
   - defaults
 dependencies:
   - beautifulsoup4=4.7.1
+  - lxml=4.3.3
   - pandas=0.24.2
   - pytest=4.5.0
   - python=3.7.3

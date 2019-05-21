@@ -9,44 +9,40 @@ OUTFILE = "enchantments.csv"
 URL = "https://www.digminecraft.com/lists/enchantment_list_pc.php"
 
 
-def clean_up_names(table):
+def clean_up_names(item_names):
     unwanted = (".png", "_sm", "iron_", "enchanted_")
-    valid = []
 
-    for img in table.find_all("img"):
-        item_types = img["data-src"].split("/")[-1]
-        if "fishing_rod" in item_types:
-            item_types = item_types.replace("fishing_rod", "fishingrod")
+    if "fishing_rod" in item_names:
+        item_names = item_names.replace("fishing_rod", "fishingrod")
 
-        for s in unwanted:
-            if s in item_types:
-                item_types = item_types.replace(s, "")
+    for chars in unwanted:
+        if chars in item_names:
+            item_names = item_names.replace(chars, "")
 
-        item_types = item_types.split("_")
-        item_types = [
-            "fishing_rod" if item == "fishingrod" else item for item in item_types
-        ]
-        valid.append(" ".join(item_types))
+    item_names = item_names.split("_")
+    item_names = [
+        "fishing_rod" if item == "fishingrod" else item for item in item_names
+    ]
+
+    return " ".join(item_names)
+
+
+def enchants_permitted(filename):
+    with open(filename) as file:
+        soup = Soup(file, "html.parser")
+
+    table = soup.find("table", {"id": "minecraft_items"})
+    valid = [
+        clean_up_names(img["data-src"].split("/")[-1]) for img in table.find_all("img")
+    ]
 
     return valid
 
 
-def enchants_permitted():
-    with open(FILE) as file:
-        soup = Soup(file, "html.parser")
-
-    table = soup.find("table", {"id": "minecraft_items"})
-    return clean_up_names(table)
-
-
-def gen_df(permitted):
-    raw_data = pd.read_html(FILE)[0]
-    names = raw_data["Enchantment(Minecraft ID Name)"].apply(
-        lambda name: name.split("(")[0]
-    )
-    id_names = raw_data["Enchantment(Minecraft ID Name)"].apply(
-        lambda name: name.split("(")[1].replace(")", "")
-    )
+def gen_df(filename, items=None):
+    raw_data = pd.read_html(filename)[0]
+    title = "Enchantment(Minecraft ID Name)"
+    id_names, names = split_title(raw_data, title)
     data = pd.DataFrame(
         dict(
             id_name=id_names,
@@ -56,18 +52,29 @@ def gen_df(permitted):
             items=raw_data["Items"],
         )
     )
-    data["items"] = pd.Series(permitted)
+    if items:
+        data["items"] = pd.Series(items)
     data.set_index("id_name", inplace=True)
 
     return data
+
+
+def split_title(df, title):
+    names = df[title].apply(
+        lambda name: name.split("(")[0]
+    )
+    id_names = df[title].apply(
+        lambda name: name.split("(")[1].replace(")", "")
+    )
+    return id_names, names
 
 
 def main():
     if not path.isfile(FILE):
         urlretrieve(URL, FILE)
 
-    permitted = enchants_permitted()
-    enchantment_data = gen_df(permitted)
+    permitted = enchants_permitted(FILE)
+    enchantment_data = gen_df(FILE, items=permitted)
     enchantment_data.to_csv(OUTFILE)
 
 

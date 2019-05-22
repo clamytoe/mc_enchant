@@ -2,6 +2,9 @@ import pandas as pd
 from bs4 import BeautifulSoup as Soup
 
 
+ROMAN = {"I": 1, "II": 2, "III": 3, "IV": 4, "V": 5}
+
+
 def clean_up_names(item_names):
     unwanted = (".png", "_sm", "iron_", "enchanted_")
 
@@ -48,6 +51,7 @@ def gen_df(filename, items=None):
     if items:
         data["items"] = pd.Series(items)
     data.set_index("id_name", inplace=True)
+    data["max_level"] = data["max_level"].apply(lambda x: ROMAN[x])
 
     return data
 
@@ -57,7 +61,9 @@ def gen_file(df, filename, output_format="csv"):
     if output_format == "csv":
         df.to_csv(file)
     else:
-        df.to_json(file)
+        df.to_json(file, orient="records")
+
+    return file
 
 
 def split_title(df, title):

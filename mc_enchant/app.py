@@ -36,7 +36,7 @@ def item_selection(filename):
         margin=2,
         shift=0,
         bullet="",
-        pad_right=5
+        pad_right=5,
     )
     item = cli.launch()
     print(f"You have chosen: {item}")

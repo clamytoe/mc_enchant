@@ -1,7 +1,7 @@
+import json
 from collections import defaultdict
 from dataclasses import dataclass, field
 from functools import total_ordering
-import json
 from pathlib import Path
 from re import compile, search
 from typing import Any, DefaultDict, List
@@ -11,7 +11,7 @@ from bs4 import BeautifulSoup as Soup
 
 out_dir = Path("/tmp")
 html_file = out_dir / "enchantment_list_pc.html"
-json_file = out_dir / "mc_items.json"
+json_file = Path.home() / "mc_items.json"
 
 HTML_FILE = Path(html_file)
 ROMAN = {"I": 1, "II": 2, "III": 3, "IV": 4, "V": 5}
@@ -88,9 +88,15 @@ def enchantable_items(soup):
 
 
 def export_data(data, out_file=json_file):
+    """Exports object data to json format
+
+    :param data: Namedtuple of Item objects
+    :param out_file: Path object to save data to
+    :return: None
+    """
     mc_json = json.dumps(data, default=lambda x: x.__dict__)
 
-    with open(out_file, "w") as f:
+    with out_file.open("w") as f:
         json.dump(mc_json, f)
 
 
@@ -167,13 +173,18 @@ def get_soup(file=HTML_FILE):
 
 
 def load_data(file=json_file):
+    """Loads json file
+
+    :param file: Path object to load data from
+    :return: JSON data
+    """
     if not file.is_file():
         soup = get_soup()
         enchantment_data = generate_enchantments(soup)
         minecraft_items = generate_items(enchantment_data)
         export_data(minecraft_items)
 
-    with open(json_file) as f:
+    with json_file.open() as f:
         json_data = json.loads(f.read())
 
     return json.loads(json_data)

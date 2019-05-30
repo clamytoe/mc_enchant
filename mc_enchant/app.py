@@ -4,27 +4,22 @@ app.py
 
 Minecraft Enchantments Generator
 """
-import json
-from os import path
-from urllib.request import urlretrieve
 
 from bullet import Bullet, Check, styles
 
-from mc_enchant.tools import enchants_permitted, gen_df, gen_file
+from mc_enchant import (
+    export_data,
+    generate_items,
+    get_soup,
+    generate_enchantments,
+    load_data,
+)
 
-FILENAME = "enchantments"
-TMP_FILE = path.join("/tmp", "enchantment_list_pc.html")
-URL = "https://www.digminecraft.com/lists/enchantment_list_pc.php"
 
-
-def item_selection(filename):
-    with open(filename) as file:
-        data = json.loads(file.read())
+def item_selection(data):
     minecraft_items = set()
-    for enchantment in data:
-        items = enchantment["items"].split()
-        for item in items:
-            minecraft_items.add(item)
+    for item in data:
+        minecraft_items.add(item)
 
     minecraft_items = sorted(minecraft_items)
 
@@ -43,15 +38,9 @@ def item_selection(filename):
 
 
 def main():
-    if not path.isfile(TMP_FILE):
-        urlretrieve(URL, TMP_FILE)
-
-    permitted = enchants_permitted(TMP_FILE)
-    enchantment_data = gen_df(TMP_FILE, items=permitted)
-    # gen_file(enchantment_data, FILENAME)
-    file = gen_file(enchantment_data, FILENAME, "json")
-
-    item_selection(file)
+    """This function is here to help you test your final code"""
+    json_file = load_data()
+    item_selection(json_file)
 
 
 if __name__ == "__main__":

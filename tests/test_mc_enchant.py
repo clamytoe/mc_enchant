@@ -65,7 +65,7 @@ def enchantment_mock():
         "python_developer",
         "Python Developer",
         10,
-        "Ability automate really boring and repetative tasks at work",
+        "Ability automate really boring and repetitive tasks at work",
     )
     return enchant
 
@@ -119,7 +119,7 @@ def test_enchantment_class_print(enchantment_mock, capfd):
     output = capfd.readouterr()[0].split("\n")[0]
     assert (
         output
-        == "Python Developer (10): Ability automate really boring and repetative tasks at work"
+        == "Python Developer (10): Ability automate really boring and repetitive tasks at work"
     )
 
 

@@ -168,7 +168,7 @@ def test_generate_enchantments_with_mock(mock_data):
 def test_generate_enchantments_from_source():
     soup = get_soup()
     data = generate_enchantments(soup)
-    assert len(data.keys()) == 37
+    assert len(data.keys()) == 38
     assert data["efficiency"].max_level == 5
 
 
@@ -211,7 +211,7 @@ def test_gen_items_mocked(mocked_generate_items, item, expected):
                 "smite",
             ],
         ),
-        ("boots", ["depth_strider", "feather_falling", "frost_walker"]),
+        ("boots", ["depth_strider", "feather_falling", "frost_walker", "soul_speed"]),
         ("bow", ["flame", "infinity", "power", "punch"]),
         ("chestplate", ["vanishing_curse", "mending", "unbreaking"]),
         ("crossbow", ["multishot", "piercing", "quick_charge"]),
@@ -267,7 +267,7 @@ def test_gen_items(coders_dataset, item, expected):
         ),
         (
             "boots",
-            "Boots: \n  [3] depth_strider\n  [4] feather_falling\n  [2] frost_walker",
+            "Boots: \n  [3] depth_strider\n  [4] feather_falling\n  [2] frost_walker\n  [3] soul_speed",
         ),
         ("bow", "Bow: \n  [1] flame\n  [1] infinity\n  [5] power\n  [2] punch"),
         (

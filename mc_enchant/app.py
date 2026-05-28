@@ -93,10 +93,18 @@ def choose_enchantments(item_key, data):
 
 
 def choose_levels(chosen):
-    """Ask user for level of each chosen enchantment."""
+    """Ask user for level of each chosen enchantment, unless max_level == 1."""
     final = {}
     for ench in chosen:
-        prompt = f"{ench['name']} level (1–{ench['max_level']}): "
+        max_lvl = ench["max_level"]
+
+        # If only one level exists, auto‑assign it
+        if max_lvl == 1:
+            final[ench["id_name"]] = 1
+            continue
+
+        # Otherwise prompt the user
+        prompt = f"{ench['name']} level (1–{max_lvl}): "
         lvl = Input(prompt=prompt).launch()
 
         try:
@@ -104,7 +112,7 @@ def choose_levels(chosen):
         except ValueError:
             lvl = 1
 
-        lvl = max(1, min(lvl, ench["max_level"]))
+        lvl = max(1, min(lvl, max_lvl))
         final[ench["id_name"]] = lvl
 
     return final

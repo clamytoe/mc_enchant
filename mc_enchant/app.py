@@ -3,6 +3,7 @@
 Minecraft Enchantments Generator (Bullet TUI)
 """
 
+import argparse
 from bullet import Bullet, Check, Input
 from mc_enchant import load_data
 from mc_enchant.command_builder import build_give_command
@@ -156,43 +157,49 @@ def choose_levels(chosen):
 
 
 def choose_custom_name():
-    name = Input(prompt="Custom item name (optional): ").launch()
-    return name.strip() or None
+    name = Input(prompt="Custom item name: ").launch()
+    return name.strip() or "MC Enchanted Item"
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--levels",
+        action="store_true",
+        help="Ask for enchantment levels instead of auto-selecting max levels"
+    )
+    args = parser.parse_args()
+
     data = load_data()
 
     item_key = choose_item(data)
     material = choose_material(item_key)
+    full_item_key = f"{material}_{item_key}" if material else item_key
 
-    if material:
-        full_item_id = f"{material}_{item_key}"
-    else:
-        full_item_id = item_key
-
+    # Enchantment selection loop (with conflict detection)
     while True:
         chosen = choose_enchantments(item_key, data)
-
         selected_ids = [e["id_name"] for e in chosen]
         conflicts = detect_conflicts(selected_ids)
 
         if not conflicts:
-            break  # no conflicts → proceed
+            break
 
         print("\n⚠️  Enchantment conflicts detected:")
         for a, b in conflicts:
             print(f"   - {a} conflicts with {b}")
-
         print("\nPlease adjust your selection.\n")
 
+    # NEW: auto-max or manual levels
+    if args.levels:
+        levels = choose_levels(chosen)
+    else:
+        levels = {e["id_name"]: e["max_level"] for e in chosen}
 
-    levels = choose_levels(chosen)
     custom_name = choose_custom_name()
 
-    # Build final command
     cmd = build_give_command(
-        item_key=full_item_id,
+        item_key=full_item_key,
         enchantments=levels,
         custom_name=custom_name,
     )

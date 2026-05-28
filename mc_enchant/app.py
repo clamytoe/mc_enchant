@@ -21,14 +21,20 @@ MATERIAL_ITEMS = {
     "boots",
     "mace",
 }
-MATERIALS = [
-    "wooden",
-    "stone",
-    "iron",
-    "golden",
-    "diamond",
-    "netherite",
-]
+MATERIAL_MAP = {
+    # Tools
+    "sword": ["wooden", "stone", "iron", "golden", "diamond", "netherite"],
+    "axe": ["wooden", "stone", "iron", "golden", "diamond", "netherite"],
+    "pickaxe": ["wooden", "stone", "iron", "golden", "diamond", "netherite"],
+    "shovel": ["wooden", "stone", "iron", "golden", "diamond", "netherite"],
+    "hoe": ["wooden", "stone", "iron", "golden", "diamond", "netherite"],
+
+    # Armor
+    "helmet": ["leather", "iron", "golden", "diamond", "netherite"],
+    "chestplate": ["leather", "iron", "golden", "diamond", "netherite"],
+    "leggings": ["leather", "iron", "golden", "diamond", "netherite"],
+    "boots": ["leather", "iron", "golden", "diamond", "netherite"],
+}
 CONFLICTS = {
     "silk_touch": {"fortune"},
     "fortune": {"silk_touch"},
@@ -85,13 +91,14 @@ def choose_item(data):
 from bullet import Bullet
 
 def choose_material(item_key):
-    """Return material prefix for items that require it."""
-    if item_key not in MATERIAL_ITEMS:
-        return ""  # armor like 'armor', 'bow', 'trident', etc.
+    """Return material prefix for items that support materials."""
+    materials = MATERIAL_MAP.get(item_key)
+    if not materials:
+        return ""  # item has no material variants
 
     cli = Bullet(
         prompt=f"Choose material for your {item_key}:",
-        choices=MATERIALS,
+        choices=materials,
         bullet="•",
         margin=2,
         pad_right=4,

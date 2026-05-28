@@ -28,6 +28,43 @@ MATERIALS = [
     "diamond",
     "netherite",
 ]
+CONFLICTS = {
+    "silk_touch": {"fortune"},
+    "fortune": {"silk_touch"},
+
+    "sharpness": {"smite", "bane_of_arthropods"},
+    "smite": {"sharpness", "bane_of_arthropods"},
+    "bane_of_arthropods": {"sharpness", "smite"},
+
+    "protection": {"fire_protection", "blast_protection", "projectile_protection"},
+    "fire_protection": {"protection", "blast_protection", "projectile_protection"},
+    "blast_protection": {"protection", "fire_protection", "projectile_protection"},
+    "projectile_protection": {"protection", "fire_protection", "blast_protection"},
+
+    "depth_strider": {"frost_walker"},
+    "frost_walker": {"depth_strider"},
+
+    "multishot": {"piercing"},
+    "piercing": {"multishot"},
+
+    "riptide": {"channeling", "loyalty"},
+    "channeling": {"riptide"},
+    "loyalty": {"riptide"},
+}
+
+
+def detect_conflicts(selected_ids):
+    """Return a list of (a, b) conflicting enchantment pairs."""
+    conflicts = []
+    selected_set = set(selected_ids)
+
+    for ench in selected_set:
+        if ench in CONFLICTS:
+            for bad in CONFLICTS[ench]:
+                if bad in selected_set:
+                    conflicts.append((ench, bad))
+
+    return conflicts
 
 
 def choose_item(data):
@@ -134,7 +171,22 @@ def main():
     else:
         full_item_id = item_key
 
-    chosen = choose_enchantments(item_key, data)
+    while True:
+        chosen = choose_enchantments(item_key, data)
+
+        selected_ids = [e["id_name"] for e in chosen]
+        conflicts = detect_conflicts(selected_ids)
+
+        if not conflicts:
+            break  # no conflicts → proceed
+
+        print("\n⚠️  Enchantment conflicts detected:")
+        for a, b in conflicts:
+            print(f"   - {a} conflicts with {b}")
+
+        print("\nPlease adjust your selection.\n")
+
+
     levels = choose_levels(chosen)
     custom_name = choose_custom_name()
 

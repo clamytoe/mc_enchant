@@ -80,7 +80,7 @@ def enchantable_items(soup):
     """
     table = soup.find("table", {"id": "minecraft_items"})
     items = [
-        clean_up_names(img["data-src"].split("/")[-1]).split()
+        clean_up_names(img["src"].split("/")[-1]).split()
         for img in table.find_all("img")
     ]
 

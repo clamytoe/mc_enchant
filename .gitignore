@@ -112,3 +112,6 @@ ENV/
 # Project file
 enchantments.csv
 enchantments.json
+
+# VS Code
+.vscode/

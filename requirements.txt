@@ -1,5 +1,7 @@
-beautifulsoup4==4.7.1
-bullet==2.1.0
-lxml==6.1.0
-pandas==0.24.2
-pytest==9.0.3
+beautifulsoup4
+bullet
+isort
+pip
+platformdirs
+pytokens
+requests

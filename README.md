@@ -27,7 +27,7 @@ cd mc_enchant
 
 If you are an Anaconda user, this command will get you up to speed with the base installation.
 ```zsh
-conda env create
+conda env create -f environment.yml
 conda activate mc
 ```
 
@@ -75,11 +75,13 @@ If you encounter any problems, please [file an issue](https://github.com/clamyto
 
 ## Changelog
 
+* **v0.4.0** Updated to Python 3.13.3 and improved scraping source website.
+* **v0.3.0** Added conflict resolution, data caching, ease of use features.
 * **v0.2.0** Refactored project and completed the code.
 * **v0.1.0** Initial commit.
 
-[python-version]:https://img.shields.io/badge/python-3.7-brightgreen.svg
-[latest-version]:https://img.shields.io/badge/version-0.1.0-blue.svg
+[python-version]:https://img.shields.io/badge/python-3.13.3-brightgreen.svg
+[latest-version]:https://img.shields.io/badge/version-0.4.0-blue.svg
 [travis-image]:https://travis-ci.org/clamytoe/mc_enchant.svg?branch=master
 [travis-url]:https://travis-ci.org/clamytoe/mc_enchant
 [bch-image]:https://bettercodehub.com/edge/badge/clamytoe/mc_enchant?branch=master

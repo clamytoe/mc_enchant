@@ -1,14 +1,7 @@
-from mc_enchant import *
-from .tools import (
-    Enchantment,
-    Item,
-    export_data,
-    generate_items,
-    get_soup,
-    generate_enchantments,
-    load_data,
-)
+from __future__ import annotations
 
-__author__ = 'Martin Uribe'
-__email__ = 'clamytoe@gmail.com'
-__version__ = '0.2.0'
+from .load_data import load_data
+
+__author__ = "Martin Uribe"
+__email__ = "clamytoe@gmail.com"
+__version__ = "0.4.0"

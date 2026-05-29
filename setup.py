@@ -37,11 +37,11 @@ setup(
         #   5 - Production/Stable
         #   6 - Mature
         #   7 - Inactive
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 5 - Alpha",
         "Intended Audience :: End Users/Desktop",
         "Topic :: Utilities",
         "License :: OSI Approved :: MIT License",
-        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.13.3",
     ],
     keywords="python utility",
     packages=find_packages(exclude=["contrib", "docs", "tests"]),
@@ -49,7 +49,7 @@ setup(
     license="MIT",
     entry_points={
         "console_scripts": [
-            "mc_enchant=mc_enchant.app:main"
+            "mc_enchant=mc_enchant.app:cli"
         ],
     },
     project_urls={

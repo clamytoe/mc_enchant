@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 import json
 
 
@@ -14,10 +15,9 @@ def build_give_command(item_key, enchantments, custom_name=None):
     # minecraft:enchantments={"minecraft:flame":1,...}
     if enchantments:
         ench_pairs = ",".join(
-            f'"minecraft:{eid}":{lvl}'
-            for eid, lvl in enchantments.items()
+            f'"minecraft:{eid}":{lvl}' for eid, lvl in enchantments.items()
         )
-        components.append(f'minecraft:enchantments={{{ench_pairs}}}')
+        components.append(f"minecraft:enchantments={{{ench_pairs}}}")
 
     # minecraft:custom_name='Mighty Bow'
     if custom_name:

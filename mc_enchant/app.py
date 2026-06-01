@@ -5,9 +5,12 @@ from typing import Dict, List, Tuple
 
 from bullet import Bullet, Check, Input
 
-from .load_data import data_exists, load_data, save_data
-from .scraper import scrape_all
 from .enchantments_data import ENCHANTMENTS
+
+
+# ─────────────────────────────────────────────────────────────
+# Item → Material mapping
+# ─────────────────────────────────────────────────────────────
 
 MATERIAL_MAP = {
     # Tools
@@ -23,7 +26,7 @@ MATERIAL_MAP = {
     "leggings": ["leather", "iron", "golden", "diamond", "netherite"],
     "boots": ["leather", "iron", "golden", "diamond", "netherite"],
 
-    # Single-material items
+    # Single-material items (represented as [""])
     "shears": [""],
     "fishing_rod": [""],
     "flint_and_steel": [""],
@@ -38,6 +41,7 @@ MATERIAL_MAP = {
     "brush": [""],
     "book": [""],
 }
+
 NO_MATERIAL_ITEMS = {
     "trident",
     "crossbow",
@@ -53,6 +57,12 @@ NO_MATERIAL_ITEMS = {
     "brush",
     "book",
 }
+
+
+# ─────────────────────────────────────────────────────────────
+# Enchantment conflict rules
+# ─────────────────────────────────────────────────────────────
+
 CONFLICTS: Dict[str, set[str]] = {
     "silk_touch": {"fortune"},
     "fortune": {"silk_touch"},
@@ -74,6 +84,7 @@ CONFLICTS: Dict[str, set[str]] = {
 
 
 def detect_conflicts(selected_ids: List[str]) -> List[Tuple[str, str]]:
+    """Return a list of unique conflicting enchantment pairs."""
     conflicts: List[Tuple[str, str]] = []
     selected_set = set(selected_ids)
 
@@ -83,6 +94,7 @@ def detect_conflicts(selected_ids: List[str]) -> List[Tuple[str, str]]:
                 if bad in selected_set:
                     conflicts.append((ench, bad))
 
+    # Deduplicate symmetric pairs
     unique: set[Tuple[str, str]] = set()
     result: List[Tuple[str, str]] = []
     for a, b in conflicts:
@@ -93,11 +105,20 @@ def detect_conflicts(selected_ids: List[str]) -> List[Tuple[str, str]]:
     return result
 
 
-def build_item_index(_: Dict[str, object]) -> Dict[str, List[Dict[str, object]]]:
+# ─────────────────────────────────────────────────────────────
+# Build reverse index: item → enchantments
+# ─────────────────────────────────────────────────────────────
+
+def build_item_index(_: Dict[str, object] | None = None) -> Dict[str, List[Dict[str, object]]]:
+    """
+    Build a reverse index: item_key -> list of enchantment dicts.
+
+    The optional argument is kept for backward compatibility and ignored.
+    """
     item_index: Dict[str, List[Dict[str, object]]] = {}
 
     for ench_id, ench_data in ENCHANTMENTS.items():
-        e = {
+        entry = {
             "id_name": ench_id,
             "name": ench_id.replace("_", " ").title(),
             "max_level": ench_data["max"],
@@ -105,10 +126,14 @@ def build_item_index(_: Dict[str, object]) -> Dict[str, List[Dict[str, object]]]
         }
 
         for item in ench_data["items"]:
-            item_index.setdefault(item, []).append(e)
+            item_index.setdefault(item, []).append(entry)
 
     return item_index
 
+
+# ─────────────────────────────────────────────────────────────
+# UI helpers
+# ─────────────────────────────────────────────────────────────
 
 def pretty_item_name(item_key: str) -> str:
     return item_key.replace("_", " ").title()
@@ -116,10 +141,8 @@ def pretty_item_name(item_key: str) -> str:
 
 def choose_item(item_index: Dict[str, List[Dict[str, object]]]) -> str:
     choices = sorted(item_index.keys())
-    if not choices:
-        raise RuntimeError("No items available from enchantment data.")
-
     labels = [pretty_item_name(c) for c in choices]
+
     cli = Bullet(
         prompt="Choose an item:",
         choices=labels,
@@ -128,18 +151,14 @@ def choose_item(item_index: Dict[str, List[Dict[str, object]]]) -> str:
         pad_right=4,
     )
     label = cli.launch()
-    mapping = dict(zip(labels, choices))
-    return mapping[label]
+    return dict(zip(labels, choices))[label]
 
 
-def choose_material(item_key):
+def choose_material(item_key: str) -> str:
     if item_key in NO_MATERIAL_ITEMS:
-        return ""  # skip material selection entirely
-
-    materials = MATERIAL_MAP.get(item_key)
-    if not materials:
         return ""
 
+    materials = MATERIAL_MAP.get(item_key, [""])
     cli = Bullet(
         prompt=f"Choose material for your {item_key}:",
         choices=materials,
@@ -150,16 +169,10 @@ def choose_material(item_key):
     return cli.launch()
 
 
-def choose_enchantments(
-    item_key: str, item_index: Dict[str, List[Dict[str, object]]]
-) -> List[Dict[str, object]]:
-    enchants = sorted(
-        item_index[item_key],
-        key=lambda e: str(e["name"]).lower(),  # type: ignore[index]
-    )
-    choices = [
-        f"{e['name']} (max {e['max_level']})" for e in enchants  # type: ignore[index]
-    ]
+def choose_enchantments(item_key: str, item_index: Dict[str, List[Dict[str, object]]]):
+    enchants = sorted(item_index[item_key], key=lambda e: e["name"].lower())
+    choices = [f"{e['name']} (max {e['max_level']})" for e in enchants]
+
     cli = Check(
         prompt=f"Choose enchantments for your {pretty_item_name(item_key)}:",
         choices=choices,
@@ -168,38 +181,38 @@ def choose_enchantments(
         pad_right=4,
     )
     selected_labels = cli.launch()
-    label_to_ench = dict(zip(choices, enchants))
-    return [label_to_ench[l] for l in selected_labels]
+    return [dict(zip(choices, enchants))[l] for l in selected_labels]
 
 
 def choose_levels(chosen: List[Dict[str, object]]) -> Dict[str, int]:
     final: Dict[str, int] = {}
-    for ench in chosen:
-        max_lvl = int(ench["max_level"])  # type: ignore[index]
 
+    for ench in chosen:
+        max_lvl = ench["max_level"]
         if max_lvl == 1:
-            final[str(ench["id_name"])] = 1  # type: ignore[index]
+            final[ench["id_name"]] = 1
             continue
 
-        prompt = f"{ench['name']} level (1–{max_lvl}): "  # type: ignore[index]
-        lvl_str = Input(prompt=prompt).launch()
-
+        lvl_str = Input(prompt=f"{ench['name']} level (1–{max_lvl}): ").launch()
         try:
             lvl = int(lvl_str)
         except ValueError:
             lvl = max_lvl
 
         lvl = max(1, min(lvl, max_lvl))
-        final[str(ench["id_name"])] = lvl  # type: ignore[index]
+        final[ench["id_name"]] = lvl
 
     return final
 
 
 def choose_custom_name() -> str | None:
-    name = Input(prompt="Custom name (leave blank for none): ").launch()
-    name = name.strip()
+    name = Input(prompt="Custom name (leave blank for none): ").launch().strip()
     return name or None
 
+
+# ─────────────────────────────────────────────────────────────
+# Command builder
+# ─────────────────────────────────────────────────────────────
 
 def build_give_command(
     item_key: str, enchantments: Dict[str, int], custom_name: str | None
@@ -208,8 +221,7 @@ def build_give_command(
 
     if enchantments:
         ench_parts = [f'"minecraft:{k}":{v}' for k, v in enchantments.items()]
-        ench_str = "minecraft:enchantments={" + ",".join(ench_parts) + "}"
-        components.append(ench_str)
+        components.append("minecraft:enchantments={" + ",".join(ench_parts) + "}")
 
     if custom_name:
         components.append(f"minecraft:custom_name='{custom_name}'")
@@ -218,13 +230,12 @@ def build_give_command(
     return f"/give @p minecraft:{item_key}[{comp_str}] 1"
 
 
+# ─────────────────────────────────────────────────────────────
+# Main CLI
+# ─────────────────────────────────────────────────────────────
+
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--update",
-        action="store_true",
-        help="Scrape DigMinecraft and refresh enchantment data",
-    )
     parser.add_argument(
         "--manual-levels",
         action="store_true",
@@ -232,25 +243,7 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    if args.update:
-        print("Updating enchantment data from DigMinecraft...")
-        data = scrape_all()
-        save_data(data)
-        print("Update complete.\n")
-    elif not data_exists():
-        print("No enchantment data found. Scraping for the first time...")
-        try:
-            data = scrape_all()
-            save_data(data)
-            print("Initial data saved.\n")
-        except Exception as e:
-            print("Error scraping enchantments:", e)
-            print("Cannot continue without enchantment data.")
-            return
-    else:
-        data = load_data()
-
-    item_index = build_item_index(data)
+    item_index = build_item_index()
 
     item_key = choose_item(item_index)
     material = choose_material(item_key)
@@ -258,7 +251,7 @@ def main() -> None:
 
     while True:
         chosen = choose_enchantments(item_key, item_index)
-        selected_ids = [str(e["id_name"]) for e in chosen]  # type: ignore[index]
+        selected_ids = [e["id_name"] for e in chosen]
         conflicts = detect_conflicts(selected_ids)
 
         if not conflicts:
@@ -269,21 +262,15 @@ def main() -> None:
             print(f"   - {a} conflicts with {b}")
         print("\nPlease adjust your selection.\n")
 
-    if args.manual_levels:
-        levels = choose_levels(chosen)
-    else:
-        levels = {
-            str(e["id_name"]): int(e["max_level"])  # type: ignore[index]
-            for e in chosen
-        }
+    levels = (
+        choose_levels(chosen)
+        if args.manual_levels
+        else {e["id_name"]: e["max_level"] for e in chosen}
+    )
 
     custom_name = choose_custom_name()
 
-    cmd = build_give_command(
-        item_key=full_item_key,
-        enchantments=levels,
-        custom_name=custom_name,
-    )
+    cmd = build_give_command(full_item_key, levels, custom_name)
 
     print("\nYour Minecraft command:\n")
     print(cmd)
@@ -295,7 +282,3 @@ def cli():
         main()
     except KeyboardInterrupt:
         print("\nOperation cancelled by user.")
-
-
-if __name__ == "__main__":
-    main()

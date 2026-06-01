@@ -7,25 +7,35 @@ from bullet import Bullet, Check, Input
 
 from .load_data import data_exists, load_data, save_data
 from .scraper import scrape_all
+from .enchantments_data import ENCHANTMENTS
 
-MATERIAL_MAP: Dict[str, List[str]] = {
+MATERIAL_MAP = {
+    # Tools
     "sword": ["wooden", "stone", "iron", "golden", "diamond", "netherite"],
     "axe": ["wooden", "stone", "iron", "golden", "diamond", "netherite"],
     "pickaxe": ["wooden", "stone", "iron", "golden", "diamond", "netherite"],
     "shovel": ["wooden", "stone", "iron", "golden", "diamond", "netherite"],
     "hoe": ["wooden", "stone", "iron", "golden", "diamond", "netherite"],
+
+    # Armor
     "helmet": ["leather", "iron", "golden", "diamond", "netherite"],
     "chestplate": ["leather", "iron", "golden", "diamond", "netherite"],
     "leggings": ["leather", "iron", "golden", "diamond", "netherite"],
     "boots": ["leather", "iron", "golden", "diamond", "netherite"],
-    "bow": ["wooden"],
+
+    # Single-material items
+    "shears": [""],
+    "fishing_rod": [""],
+    "flint_and_steel": [""],
+    "carrot_on_a_stick": [""],
+    "warped_fungus_on_a_stick": [""],
+    "bow": [""],
     "crossbow": [""],
     "trident": [""],
-    "shield": [""],
-    "fishing_rod": [""],
-    "flinkt_and_steel": [""],
-    "shears": ["iron"],
     "mace": [""],
+    "shield": [""],
+    "elytra": [""],
+    "brush": [""],
     "book": [""],
 }
 NO_MATERIAL_ITEMS = {
@@ -35,8 +45,12 @@ NO_MATERIAL_ITEMS = {
     "fishing_rod",
     "shears",
     "flint_and_steel",
-    "mace",
+    "carrot_on_a_stick",
+    "warped_fungus_on_a_stick",
     "bow",
+    "mace",
+    "elytra",
+    "brush",
     "book",
 }
 CONFLICTS: Dict[str, set[str]] = {
@@ -79,12 +93,20 @@ def detect_conflicts(selected_ids: List[str]) -> List[Tuple[str, str]]:
     return result
 
 
-def build_item_index(data: Dict[str, object]) -> Dict[str, List[Dict[str, object]]]:
+def build_item_index(_: Dict[str, object]) -> Dict[str, List[Dict[str, object]]]:
     item_index: Dict[str, List[Dict[str, object]]] = {}
-    for ench in data["enchantments"]:
-        e = ench  # type: ignore[assignment]
-        for item in e.get("items", []):  # type: ignore[union-attr]
-            item_index.setdefault(item, []).append(e)  # type: ignore[arg-type]
+
+    for ench_id, ench_data in ENCHANTMENTS.items():
+        e = {
+            "id_name": ench_id,
+            "name": ench_id.replace("_", " ").title(),
+            "max_level": ench_data["max"],
+            "items": ench_data["items"],
+        }
+
+        for item in ench_data["items"]:
+            item_index.setdefault(item, []).append(e)
+
     return item_index
 
 

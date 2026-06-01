@@ -19,15 +19,26 @@ MATERIAL_MAP: Dict[str, List[str]] = {
     "leggings": ["leather", "iron", "golden", "diamond", "netherite"],
     "boots": ["leather", "iron", "golden", "diamond", "netherite"],
     "bow": ["wooden"],
-    "crossbow": ["wooden"],
-    "trident": ["prismarine"],
-    "shield": ["wooden"],
-    "fishing_rod": ["wooden"],
+    "crossbow": [""],
+    "trident": [""],
+    "shield": [""],
+    "fishing_rod": [""],
+    "flinkt_and_steel": [""],
     "shears": ["iron"],
-    "mace": ["iron", "diamond", "netherite"],
+    "mace": [""],
     "book": [""],
 }
-
+NO_MATERIAL_ITEMS = {
+    "trident",
+    "crossbow",
+    "shield",
+    "fishing_rod",
+    "shears",
+    "flint_and_steel",
+    "mace",
+    "bow",
+    "book",
+}
 CONFLICTS: Dict[str, set[str]] = {
     "silk_touch": {"fortune"},
     "fortune": {"silk_touch"},
@@ -99,13 +110,17 @@ def choose_item(item_index: Dict[str, List[Dict[str, object]]]) -> str:
     return mapping[label]
 
 
-def choose_material(item_key: str) -> str:
-    materials = MATERIAL_MAP.get(item_key, [])
+def choose_material(item_key):
+    if item_key in NO_MATERIAL_ITEMS:
+        return ""  # skip material selection entirely
+
+    materials = MATERIAL_MAP.get(item_key)
     if not materials:
         return ""
+
     cli = Bullet(
-        prompt=f"Choose material for your {pretty_item_name(item_key)}:",
-        choices=[m for m in materials if m],
+        prompt=f"Choose material for your {item_key}:",
+        choices=materials,
         bullet="•",
         margin=2,
         pad_right=4,

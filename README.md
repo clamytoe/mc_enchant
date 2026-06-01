@@ -4,8 +4,6 @@
 
 ![Python version][python-version]
 ![Latest version][latest-version]
-[![Build Status][travis-image]][travis-url]
-[![BCH compliance][bch-image]][bch-url]
 [![GitHub issues][issues-image]][issues-url]
 [![GitHub forks][fork-image]][fork-url]
 [![GitHub Stars][stars-image]][stars-url]
@@ -75,17 +73,14 @@ If you encounter any problems, please [file an issue](https://github.com/clamyto
 
 ## Changelog
 
+* **v0.5.0** Rebuilt whole test suite to better hit more edge cases.
 * **v0.4.0** Updated to Python 3.13.3 and improved scraping source website.
 * **v0.3.0** Added conflict resolution, data caching, ease of use features.
 * **v0.2.0** Refactored project and completed the code.
 * **v0.1.0** Initial commit.
 
 [python-version]:https://img.shields.io/badge/python-3.13.3-brightgreen.svg
-[latest-version]:https://img.shields.io/badge/version-0.4.0-blue.svg
-[travis-image]:https://travis-ci.org/clamytoe/mc_enchant.svg?branch=master
-[travis-url]:https://travis-ci.org/clamytoe/mc_enchant
-[bch-image]:https://bettercodehub.com/edge/badge/clamytoe/mc_enchant?branch=master
-[bch-url]:https://bettercodehub.com/
+[latest-version]:https://img.shields.io/badge/version-0.5.0-blue.svg
 [issues-image]:https://img.shields.io/github/issues/clamytoe/mc_enchant.svg
 [issues-url]:https://github.com/clamytoe/mc_enchant/issues
 [fork-image]:https://img.shields.io/github/forks/clamytoe/mc_enchant.svg

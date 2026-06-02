@@ -1,12 +1,6 @@
-beautifulsoup4
 black
 bullet
 isort
-mc-enchant
 mypy
-pandas
 pip
-platformdirs
 pytest
-pytokens
-requests

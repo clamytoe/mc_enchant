@@ -1,2 +1,27 @@
+[project]
+name = "mc_enchant"
+version = "0.6.0"
+description = "A fast, offline CLI tool for generating valid Minecraft /give commands with custom enchantments."
+authors = [
+    { name = "Martin Uribe", email = "clamytoe@gmail.com" }
+]
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.9"
+
+dependencies = [
+    "bullet>=2.2.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "black>=24.0",
+]
+
+[project.scripts]
+mc_enchant = "mc_enchant.app:cli"
+
 [tool.black]
 extend-exclude = '\.json$'
+line-length = 88

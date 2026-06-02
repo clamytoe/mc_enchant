@@ -1,8 +1,3 @@
-beautifulsoup4
 bullet
-isort
 pip
-platformdirs
 pytest
-pytokens
-requests

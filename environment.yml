@@ -3,17 +3,11 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - beautifulsoup4
-  - pandas
+  - black
   - isort
   - mypy
   - python=3.13.3
   - pip
   - pytest
-  - requests
   - pip:
-      - black
       - bullet
-      - mc-enchant
-      - platformdirs
-      - pytokens

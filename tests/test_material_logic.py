@@ -1,6 +1,6 @@
 import pytest
 
-from mc_enchant.app import MATERIAL_MAP, NO_MATERIAL_ITEMS
+from mc_enchant.data import MATERIAL_MAP, NO_MATERIAL_ITEMS
 
 
 def test_material_map_is_not_empty():

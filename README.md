@@ -11,7 +11,10 @@
 
 NOTE: This app was generated with [Cookiecutter](https://github.com/audreyr/cookiecutter) along with [@clamytoe's](https://github.com/clamytoe) [toepack](https://github.com/clamytoe/toepack) project template.
 
-The app scrapes [digminecraft.com](https://www.digminecraft.com/lists/enchantment_list_pc.php) for all available enchantments in vanilla Minecraft and generates a custom `/give` Minecraft command based on your choices.
+**mc_enchant** is a tiny utility that makes creating enchanted Minecraft items painless.
+Instead of digging through wikis or remembering which enchantments go on which items, you just pick what you want from a simple interactive menu.
+
+The tool knows every valid enchantment, level, and compatibility rule in vanilla Minecraft, and instantly builds the correct `/give` command for you — no internet required.
 
 ## Initial setup
 
@@ -73,6 +76,7 @@ If you encounter any problems, please [file an issue](https://github.com/clamyto
 
 ## Changelog
 
+* **v0.6.0** Refactored code because app.py was getting too big.
 * **v0.5.0** Rebuilt whole test suite to better hit more edge cases.
 * **v0.4.0** Updated to Python 3.13.3 and improved scraping source website.
 * **v0.3.0** Added conflict resolution, data caching, ease of use features.
@@ -80,7 +84,7 @@ If you encounter any problems, please [file an issue](https://github.com/clamyto
 * **v0.1.0** Initial commit.
 
 [python-version]:https://img.shields.io/badge/python-3.13.3-brightgreen.svg
-[latest-version]:https://img.shields.io/badge/version-0.5.0-blue.svg
+[latest-version]:https://img.shields.io/badge/version-0.6.0-blue.svg
 [issues-image]:https://img.shields.io/github/issues/clamytoe/mc_enchant.svg
 [issues-url]:https://github.com/clamytoe/mc_enchant/issues
 [fork-image]:https://img.shields.io/github/forks/clamytoe/mc_enchant.svg

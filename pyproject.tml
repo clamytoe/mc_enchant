@@ -25,3 +25,7 @@ mc_enchant = "mc_enchant.app:cli"
 [tool.black]
 extend-exclude = '\.json$'
 line-length = 88
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"

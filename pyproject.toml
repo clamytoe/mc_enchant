@@ -1,6 +1,6 @@
 [project]
 name = "mc_enchant"
-version = "0.6.0"
+version = "0.6.1"
 description = "A fast, offline CLI tool for generating valid Minecraft /give commands with custom enchantments."
 authors = [
     { name = "Martin Uribe", email = "clamytoe@gmail.com" }

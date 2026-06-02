@@ -76,6 +76,7 @@ If you encounter any problems, please [file an issue](https://github.com/clamyto
 
 ## Changelog
 
+* **v0.6.1** Made project PEP-621 compliant.
 * **v0.6.0** Refactored code because app.py was getting too big.
 * **v0.5.0** Rebuilt whole test suite to better hit more edge cases.
 * **v0.4.0** Updated to Python 3.13.3 and improved scraping source website.
@@ -84,7 +85,7 @@ If you encounter any problems, please [file an issue](https://github.com/clamyto
 * **v0.1.0** Initial commit.
 
 [python-version]:https://img.shields.io/badge/python-3.13.3-brightgreen.svg
-[latest-version]:https://img.shields.io/badge/version-0.6.0-blue.svg
+[latest-version]:https://img.shields.io/badge/version-0.6.1-blue.svg
 [issues-image]:https://img.shields.io/github/issues/clamytoe/mc_enchant.svg
 [issues-url]:https://github.com/clamytoe/mc_enchant/issues
 [fork-image]:https://img.shields.io/github/forks/clamytoe/mc_enchant.svg
